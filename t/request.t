@@ -15,9 +15,11 @@ subtest 'encoding' => sub {
 
 subtest 'new_response' => sub {
     my $req = Kukuru::Request->new({});
-    isa_ok $req->new_response(200), 'Kukuru::Response';
-};
+    my $res = $req->new_response(200);
 
+    isa_ok $res, 'Kukuru::Response';
+    is $res->code, 200;
+};
 
 subtest 'error' => sub {
     eval { Kukuru::Request->new };
