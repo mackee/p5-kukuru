@@ -71,7 +71,10 @@ sub _build_dest {
     my ($self, $dest) = @_;
 
     my $dest_type = ref $dest;
-    if ($dest_type eq 'ARRAY') {
+    if ($dest_type eq 'CODE') {
+        return {action => $dest};
+    }
+    elsif ($dest_type eq 'ARRAY') {
         my @dests = map { $self->_build_dest($_) } @$dest;
         return {action => \@dests};
     }
