@@ -1,6 +1,9 @@
 package Kukuru;
+use 5.10.1;
 use strict;
 use warnings;
+
+our $VERSION = "0.01";
 
 use Kukuru::Request;
 use Kukuru::Controller;
