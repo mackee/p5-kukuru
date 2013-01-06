@@ -62,6 +62,26 @@ sub BUILD {
     }
 }
 
+sub to_psgi {
+    my $class = shift;
+    my $self  = blessed $class ? $class : $class->new;
+
+    sub {
+        my $env   = shift;
+        my $match = $self->router->match($env);
+        my $klass = $self->select_controller_class($match);
+
+        my $c = $klass->new(
+            app   => $self,
+            req   => $self->request_class->new($env),
+            match => $match,
+        );
+
+        # response to psgi spec
+        $c->dispatch($match)->finalize;
+    };
+}
+
 sub select_controller_class {
     my ($self, $match) = @_;
 
