@@ -21,8 +21,7 @@ sub dispatch {
     my ($self, $match) = @_;
 
     if ($match) {
-        my $action = $match->{action}
-            or Carp::croak("Can't find action!"); # TODO: check startup
+        my $action = $match->{action};
 
         if (ref $action eq 'ARRAY') {
             for my $args (@$action) {

@@ -64,6 +64,10 @@ sub add_route {
     $opts->{method} = $method;
 
     $dest = $self->_build_dest($dest);
+    if (!$dest->{action}) {
+        Carp::croak("Can't find action at route");
+    }
+
     $self->connect($path, $dest, $opts);
 }
 

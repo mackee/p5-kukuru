@@ -67,4 +67,10 @@ subtest 'get, options, patch, post, put, del' => sub {
     is_deeply $router->routes->[5]->{method}, [qw/DELETE/];
 };
 
+subtest 'error' => sub {
+    my $router = Kukuru::Router->new;
+    eval { $router->get('/', 'test') };
+    like $@, qr/Can't find action at route/;
+};
+
 done_testing;
