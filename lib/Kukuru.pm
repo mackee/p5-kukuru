@@ -20,6 +20,11 @@ has helpers => (
     default => sub { +{} },
 );
 
+has lint => (
+    is => 'rw',
+    default => sub { 1 },
+);
+
 no Mouse;
 
 sub BUILD {
@@ -36,6 +41,24 @@ sub BUILD {
     my $meta = $self->app_controller_class->meta;
     for my $name (keys %{$self->helpers}) {
         $meta->add_method($name => $self->helpers->{$name});
+    }
+
+    if ($self->lint) {
+        # lint your application routes
+        my $routes = $self->router->routes;
+        for my $route (@$routes) {
+            my $controller = $route->{dest}->{controller} or next;
+            my $action = $route->{dest}{action};
+            my $klass  = Kukuru::Util::load_class($controller, $self->app_controller_class);
+
+            if (!($self->app_controller_class ~~ [$klass->meta->superclasses])) {
+                Carp::croak(qq!"$klass" must extend "@{[$self->app_controller_class]}"!);
+            }
+
+            if (!$klass->can($action)) {
+                Carp::croak(qq!Undefined action &${klass}::$action!);
+            }
+        }
     }
 }
 
