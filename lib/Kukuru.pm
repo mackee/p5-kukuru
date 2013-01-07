@@ -8,7 +8,6 @@ our $VERSION = "0.01";
 use Kukuru::Request;
 use Kukuru::Controller;
 use Kukuru::Router;
-use Kukuru::Renderer;
 use Kukuru::Util;
 
 use Mouse;
