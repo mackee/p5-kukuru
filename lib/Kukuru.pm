@@ -24,7 +24,7 @@ has helpers => (
 
 has lint => (
     is => 'rw',
-    default => sub { 1 },
+    default => 1,
 );
 
 no Mouse;
