@@ -9,6 +9,7 @@ use Kukuru::Request;
 use Kukuru::Controller;
 use Kukuru::Router;
 use Kukuru::Util;
+use Kukuru::Renderer;
 
 use Mouse;
 
@@ -20,6 +21,15 @@ has router => (
 has helpers => (
     is => 'rw',
     default => sub { +{} },
+);
+
+has renderer => (
+    is => 'rw',
+    default => sub { Kukuru::Renderer->new }
+);
+
+has template_engine => (
+    is => 'rw',
 );
 
 has lint => (

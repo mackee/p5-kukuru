@@ -17,7 +17,26 @@ no Mouse;
 
 # TODO: render_*
 # render_template, render_action, render_file, render_data, render_text
-sub render {}
+sub render {
+    my $self = shift;
+    my $template;
+    if (@_ % 2) {
+        $template = shift;
+    }
+
+    my %vars = @_;
+    $vars{code}     ||= 200;
+    #$vars{format}   ||= 'html';
+    if ($template) {
+        $vars{template} = $template;
+    }
+
+    $self->app->renderer->render($self, %vars);
+}
+
+# TODO: send_*系
+# send_file, send_data
+
 
 sub redirect {
     my ($self, $uri, $status) = @_;
@@ -45,7 +64,7 @@ sub uri_for {
     my $enc = $self->req->encoding;
     $uri->query_form(map { $enc->encode($_) } @$params) if $params;
 
-    return $uri;
+    $uri;
 }
 
 sub uri_with {
@@ -55,7 +74,7 @@ sub uri_with {
     my $enc = $self->req->encoding;
     $uri->query_form(map { $enc->encode($_) } @$params) if $params;
 
-    return $uri;
+    $uri;
 }
 
 sub param     { shift->req->param(@_)     }
