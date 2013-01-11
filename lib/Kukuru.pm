@@ -45,8 +45,8 @@ sub BUILD {
 
     # autobuild controller if fail load "app_controller_class"
     if (Mouse::Util::_try_load_one_class($self->app_controller_class)) {
-        Mouse::Meta::Class->initialize($self->app_controller_class)
-            ->superclasses($self->controller_class);
+        my $meta = Mouse->init_meta(for_class => $self->app_controller_class);
+        $meta->superclasses($self->controller_class);
     }
 
     # add helpers for "app_controller_class"
