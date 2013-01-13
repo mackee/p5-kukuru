@@ -71,6 +71,12 @@ sub add_route {
     $self->connect($path, $dest, $opts);
 }
 
+sub add_child {
+    my ($self, $route) = @_;
+
+    push @{$self->routes}, $route;
+}
+
 sub _build_dest {
     my ($self, $dest) = @_;
 
