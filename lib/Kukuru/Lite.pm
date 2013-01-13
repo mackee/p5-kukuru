@@ -21,7 +21,8 @@ sub import {
 
     install_subroutine($caller,
         %methods,
-        app => sub { $app },
+        app    => sub { $app },
+        plugin => sub { $app->load_plugin(@_) },
     );
 } # use Mouse::Exporter ?
 

@@ -41,13 +41,15 @@ no Mouse;
 
 sub BUILD {
     my ($self) = @_;
-    $self->startup;
 
     # autobuild controller if fail load "app_controller_class"
     if (Mouse::Util::_try_load_one_class($self->app_controller_class)) {
         my $meta = Mouse->init_meta(for_class => $self->app_controller_class);
         $meta->superclasses($self->controller_class);
     }
+
+    # startup
+    $self->startup;
 
     # add helpers for "app_controller_class"
     my $meta = $self->app_controller_class->meta;
@@ -92,6 +94,13 @@ sub to_psgi {
         # response to psgi spec
         $c->dispatch($match)->finalize;
     };
+}
+
+sub load_plugin {
+    my ($self, $plugin, $options) = @_;
+    my $klass = Kukuru::Util::load_class($plugin, 'Kukuru::Plugin');
+
+    $klass->init($self, $options);
 }
 
 sub select_controller_class {
