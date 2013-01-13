@@ -41,18 +41,6 @@ sub del {
     $self->add_route([qw(DELETE)], @_);
 }
 
-sub load_routes {
-    my ($self, $base_class) = @_;
-
-    $base_class  = Mouse::load_class($base_class);
-    my @children = Module::Find::usesub($base_class);
-    for my $child ($base_class, @children) {
-        $base_class->router->add_child($_)
-            for @{$child->router->routes};
-    }
-    ($base_class, @children);
-}
-
 sub add_route {
     my ($self, $method, $path, $dest, $opts) = @_;
 
@@ -75,6 +63,15 @@ sub add_child {
     my ($self, $route) = @_;
 
     push @{$self->routes}, $route;
+}
+
+sub load_routes {
+    my ($self, @apps) = @_;
+    for my $app_class (@apps) {
+        for my $route (@{$app_class->app->router->routes}) {
+            $self->add_child($route);
+        }
+    }
 }
 
 sub _build_dest {

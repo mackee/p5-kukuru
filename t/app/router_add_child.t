@@ -24,13 +24,20 @@ use Test::More;
     __PACKAGE__->meta->make_immutable;
 }
 
-my $app = MyApp->app;
-my $app_user = MyApp::Routes::User->app;
+{
+    package MyApp::Routes::Post;
+    use strict;
+    use warnings;
+    use Kukuru::Lite;
 
-for my $route (@{$app_user->router->routes}) {
-    $app->router->add_child($route);
+    get '/post' => sub { ... };
+
+    __PACKAGE__->meta->make_immutable;
 }
+my $app = MyApp->app;
 
-is scalar(@{$app->router->routes}), 2;
+$app->router->load_routes(qw(MyApp::Routes::User MyApp::Routes::Post));
+
+is scalar(@{$app->router->routes}), 3;
 
 done_testing;
