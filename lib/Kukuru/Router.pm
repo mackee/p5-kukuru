@@ -67,6 +67,7 @@ sub add_child {
 
 sub load_routes {
     my ($self, @apps) = @_;
+
     for my $app_class (@apps) {
         for my $route (@{$app_class->app->router->routes}) {
             $self->add_child($route);
