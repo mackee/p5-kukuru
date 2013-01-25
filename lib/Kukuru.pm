@@ -23,6 +23,11 @@ has helpers => (
     default => sub { +{} },
 );
 
+has hooks => (
+    is => 'rw',
+    default => sub { +{} },
+);
+
 has renderer => (
     is => 'rw',
     default => sub { Kukuru::Renderer->new }
@@ -101,6 +106,18 @@ sub load_plugin {
     my $klass = Kukuru::Util::load_class($plugin, 'Kukuru::Plugin');
 
     $klass->init($self, $options);
+}
+
+sub add_hook {
+    my ($self, $name, $code) = @_;
+    push @{$self->hooks->{$name} ||= []}, $code;
+}
+
+sub emit_hook {
+    my ($self, $name, @args) = @_;
+    for my $code (@{$self->hooks->{$name}}) {
+        $code->($self, @args);
+    }
 }
 
 sub select_controller_class {
