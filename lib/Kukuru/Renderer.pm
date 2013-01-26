@@ -14,7 +14,6 @@ has default_handler => (
     default => 'tiffany',
 );
 
-
 no Mouse;
 
 sub BUILD {
@@ -24,8 +23,9 @@ sub BUILD {
 
     # TODO
     # $self->add_handler(json => \&_json);
+    $self->add_handler(text => \&_text);
     # $self->add_handler(data => \&_data);
-    # $self->add_handler(text => \&_text);
+    # $self->add_handler(action => \&_action);
 }
 
 sub add_handler {
@@ -36,11 +36,11 @@ sub add_handler {
 }
 
 sub render {
-    my ($self, $c, %vars) = @_;
+    my ($self, $c, $output, %vars) = @_;
 
     $vars{handler} ||= $self->build_handler(%vars);
     if (my $code = $self->handlers->{$vars{handler}}) {
-        return $code->($c, %vars);
+        return $code->($c, $output, %vars);
     }
     else {
         Carp::croak(qq!No handler for "$vars{handler}" available.!);
@@ -52,6 +52,7 @@ sub build_handler {
     return $vars{handler} if $vars{handler};
 
     my $handler = $vars{json} ? 'json' :
+                  $vars{text} ? 'text' :
                   $vars{file} ? 'file' :
                   $vars{data} ? 'data' : undef;
 
@@ -59,13 +60,15 @@ sub build_handler {
 }
 
 sub _tiffany {
-    my ($c, %vars) = @_;
-    my $code     = $vars{code}   || 200;
-    my $format   = $vars{format} || 'html';
+    my ($c, $output, %vars) = @_;
     my $template = $vars{template};
-    my $output   = $c->app->template_engine->render($template, \%vars);
 
-    $c->req->new_response($code, [], [$output]);
+    $$output = $c->app->template_engine->render($template, {c => $c, %vars});
+}
+
+sub _text {
+    my ($c, $output, %vars) = @_;
+    $$output = $vars{text};
 }
 
 __PACKAGE__->meta->make_immutable;

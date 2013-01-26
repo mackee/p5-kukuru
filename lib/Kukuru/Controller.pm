@@ -25,13 +25,13 @@ sub render {
     }
 
     my %vars = @_;
-    $vars{code}     ||= 200;
-    #$vars{format}   ||= 'html';
     if ($template) {
         $vars{template} = $template;
     }
 
-    $self->app->renderer->render($self, %vars);
+    my $code = $vars{code} || 200;
+    $self->app->renderer->render($self, \my $output, %vars);
+    $self->req->new_response($code, [], [$output]);
 }
 
 # TODO: send_*系

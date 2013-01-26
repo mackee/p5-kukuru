@@ -25,4 +25,5 @@ subtest 'build_handler: default handler' => sub {
     my $handler = $r->build_handler();
     is $handler, 'tiffany';
 };
+
 done_testing;
