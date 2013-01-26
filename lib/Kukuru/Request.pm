@@ -58,15 +58,18 @@ sub param_raw {
     return $self->parameters_raw->get_all($key);
 }
 
-
-sub charset { 'utf-8' }
+sub encoding_name {
+    my ($self) = @_;
+    $self->env->{'kukuru.request.encoding_name'} || 'utf-8';
+}
 
 sub encoding {
     my ($self) = @_;
     return $self->{encoding} if $self->{encoding};
 
-    my $enc = Encode::find_encoding($self->charset)
-        or Carp::croak("encoding '".$self->charset."' not found.");
+    my $enc_name = $self->encoding_name;
+    my $enc = Encode::find_encoding($enc_name)
+        or Carp::croak("encoding '$enc_name' not found.");
 
     $self->{encoding} = $enc;
 }
