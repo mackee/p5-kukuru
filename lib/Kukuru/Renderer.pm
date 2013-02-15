@@ -5,6 +5,7 @@ use warnings;
 use Kukuru::Renderer::Handler::Tiffany;
 use Kukuru::Renderer::Handler::Text;
 use Kukuru::Renderer::Handler::JSON;
+use Kukuru::Renderer::Handler::Data;
 
 use Mouse;
 use Carp ();
@@ -27,10 +28,9 @@ sub BUILD {
     $self->add_handler(tiffany => \&Kukuru::Renderer::Handler::Tiffany::handler);
     $self->add_handler(text    => \&Kukuru::Renderer::Handler::Text::handler);
     $self->add_handler(json    => \&Kukuru::Renderer::Handler::JSON::handler);
+    $self->add_handler(data    => \&Kukuru::Renderer::Handler::Data::handler);
 
     # TODO
-    # $self->add_handler(json => \&_json);
-    # $self->add_handler(data => \&_data);
     # $self->add_handler(action => \&_action);
 }
 
