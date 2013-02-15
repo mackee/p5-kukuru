@@ -65,16 +65,4 @@ sub build_handler {
     return $handler || $self->default_handler;
 }
 
-sub _tiffany {
-    my ($c, $output, %vars) = @_;
-    my $template = $vars{template};
-
-    $$output = $c->app->template_engine->render($template, {c => $c, %vars});
-}
-
-sub _text {
-    my ($c, $output, %vars) = @_;
-    $$output = $vars{text};
-}
-
 __PACKAGE__->meta->make_immutable;
