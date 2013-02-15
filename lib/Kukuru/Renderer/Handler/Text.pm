@@ -9,8 +9,7 @@ sub handler {
     my $content_type = $vars{type}   || "text/plain; charset=utf-8";
 
     my $headers = [
-        "Content-Type"   => $content_type,
-        "Content-Length" => length($output),
+        "Content-Type" => $content_type,
     ];
 
     $c->req->new_response($status, $headers, [$output]);

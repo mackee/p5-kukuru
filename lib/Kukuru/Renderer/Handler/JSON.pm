@@ -36,7 +36,6 @@ Your request may be JSON hijacking.
 If you are not an attacker, please add 'X-Requested-With' header to each request.
 ...
         );
-        $res->content_length(length $res->content);
         return $res;
     }
 
@@ -51,7 +50,6 @@ If you are not an attacker, please add 'X-Requested-With' header to each request
     }
 
     $res->header( 'X-Content-Type-Options' => 'nosniff' ); # defense from XSS
-    $res->content_length(length($output));
     $res->body([$output]);
 
     return $res;

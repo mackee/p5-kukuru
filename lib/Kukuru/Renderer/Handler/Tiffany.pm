@@ -10,8 +10,7 @@ sub handler {
     my $output       = $c->app->template_engine->render($template, {c => $c, %vars});
 
     my $headers = [
-        "Content-Type"   => $content_type,
-        "Content-Length" => length($output),
+        "Content-Type" => $content_type,
     ];
 
     $c->req->new_response($status, $headers, [$output]);

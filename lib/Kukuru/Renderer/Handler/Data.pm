@@ -16,8 +16,7 @@ sub handler {
     }
 
     my $headers = [
-        "Content-Type"   => $content_type,
-        "Content-Length" => Plack::Util::content_length($output),
+        "Content-Type" => $content_type,
     ];
 
     $c->req->new_response($status, $headers, $output);
