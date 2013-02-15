@@ -4,9 +4,10 @@ use warnings;
 
 sub handler {
     my ($c, %vars) = @_;
+    my $charset      = $c->req->encoding->mime_name;
     my $output       = $vars{text};
     my $status       = $vars{status} || 200;
-    my $content_type = $vars{type}   || "text/plain; charset=utf-8";
+    my $content_type = $vars{type}   || "text/plain; charset=$charset";
 
     my $headers = [
         "Content-Type" => $content_type,

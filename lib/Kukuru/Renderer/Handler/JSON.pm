@@ -12,8 +12,8 @@ my %_ESCAPE = (
 
 sub handler {
     my ($c, %vars) = @_;
-    my $stuff        = $vars{json};
-    my $status       = $vars{status} || 200;
+    my $stuff  = $vars{json};
+    my $status = $vars{status} || 200;
 
     # for IE7 JSON venularity.
     # see http://www.atmarkit.co.jp/fcoding/articles/webapp/05/webapp05a.html
@@ -39,20 +39,18 @@ If you are not an attacker, please add 'X-Requested-With' header to each request
         return $res;
     }
 
-    my $res = $c->req->new_response(200);
-    my $encoding = $c->req->encoding->mime_name;
-
-    $res->content_type("application/json; charset=$encoding");
-
     # add UTF-8 BOM if the client is Safari
     if ( $user_agent =~ m/Safari/ and $encoding eq 'utf-8' ) {
         $output = "\xEF\xBB\xBF" . $output;
     }
 
-    $res->header( 'X-Content-Type-Options' => 'nosniff' ); # defense from XSS
-    $res->body([$output]);
+    my $charset = $c->req->encoding->mime_name;
+    my $headers = [
+        "Content-Type"           => "application/json; charset=$charset",
+        "X-Content-Type-Options" => "nosniff",
+    ];
 
-    return $res;
+    $c->req->new_response($status, $headers, [$output]);
 }
 
 1;
