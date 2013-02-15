@@ -1,6 +1,11 @@
 package Kukuru::Renderer;
 use strict;
 use warnings;
+
+use Kukuru::Renderer::Handler::Tiffany;
+use Kukuru::Renderer::Handler::Text;
+use Kukuru::Renderer::Handler::JSON;
+
 use Mouse;
 use Carp ();
 
@@ -19,11 +24,12 @@ no Mouse;
 sub BUILD {
     my ($self) = @_;
 
-    $self->add_handler(tiffany => \&_tiffany);
+    $self->add_handler(tiffany => \&Kukuru::Renderer::Handler::Tiffany::handler);
+    $self->add_handler(text    => \&Kukuru::Renderer::Handler::Text::handler);
+    $self->add_handler(json    => \&Kukuru::Renderer::Handler::JSON::handler);
 
     # TODO
     # $self->add_handler(json => \&_json);
-    $self->add_handler(text => \&_text);
     # $self->add_handler(data => \&_data);
     # $self->add_handler(action => \&_action);
 }
@@ -36,11 +42,11 @@ sub add_handler {
 }
 
 sub render {
-    my ($self, $c, $output, %vars) = @_;
+    my ($self, $c, %vars) = @_;
 
     $vars{handler} ||= $self->build_handler(%vars);
     if (my $code = $self->handlers->{$vars{handler}}) {
-        return $code->($c, $output, %vars);
+        $code->($c, %vars);
     }
     else {
         Carp::croak(qq!No handler for "$vars{handler}" available.!);

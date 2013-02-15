@@ -29,9 +29,7 @@ sub render {
         $vars{template} = $template;
     }
 
-    my $code = $vars{code} || 200;
-    $self->app->renderer->render($self, \my $output, %vars);
-    $self->req->new_response($code, [], [$output]);
+    $self->app->renderer->render($self, %vars);
 }
 
 # TODO: send_*系

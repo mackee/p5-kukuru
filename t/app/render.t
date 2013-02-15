@@ -34,15 +34,15 @@ use Text::Xslate;
             is_deeply $res->body, ["hoge\n"];
 
             $res = $self->render('template.tx',
-                code => 404,
-                foo  => 1,
+                status => 404,
+                foo    => 1,
             );
             is $res->code, 404;
             is_deeply $res->body, ["hoge1\n"];
 
             $res = $self->render(template => 'template.tx',
-                code => 404,
-                foo  => 1,
+                status => 404,
+                foo    => 1,
             );
             is $res->code, 404;
             is_deeply $res->body, ["hoge1\n"];
