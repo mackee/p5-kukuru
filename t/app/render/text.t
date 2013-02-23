@@ -54,23 +54,24 @@ test_psgi
 
         subtest 'argument byte-string' => sub {
             my $res = $cb->(GET '/byte-string');
-            is $res->code, 200;
             isnt $res->content, encode_utf8 "あいうえお";
         };
 
         subtest 'argument text-string' => sub {
             my $res = $cb->(GET '/text-string');
-            is $res->code, 200;
             is $res->headers->header('Content-Type'), "text/plain; charset=UTF-8";
+            is $res->content, encode_utf8 "あいうえお";
+        };
 
-            my $content = encode_utf8 "あいうえお";
-            is $res->content, $content;
-            is $res->content_length, length($content);
+        subtest 'status is 200' => sub {
+            my $res = $cb->(GET '/text-string');
+            is $res->code, 200;
         };
 
         subtest 'status is 500' => sub {
             my $res = $cb->(GET '/override-status');
             is $res->code, 500;
+            is $res->content, encode_utf8 "あいうえお";
         };
 
         subtest 'type is "text/html; charset=UTF-8"' => sub {
@@ -81,6 +82,12 @@ test_psgi
         subtest 'format is html' => sub {
             my $res = $cb->(GET '/override-format');
             is $res->headers->header('Content-Type'), "text/html; charset=UTF-8";
+        };
+
+        subtest 'content-length' => sub {
+            my $res = $cb->(GET '/text-string');
+            my $content = encode_utf8 "あいうえお";
+            is $res->content_length, length($content);
         };
     };
 
