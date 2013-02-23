@@ -1,52 +1,87 @@
 use strict;
 use warnings;
+use utf8;
 use Test::More;
 use Plack::Test;
 use HTTP::Request::Common;
+use Encode;
 
 {
     package MyApp;
-    use File::Spec;
-    use File::Basename qw(dirname);
-    use Text::Xslate;
-    use Test::More;
     use Mouse;
     BEGIN { extends 'Kukuru' };
-    has '+template_engine' => (
-        default => sub {
-            Text::Xslate->new(
-                path => [File::Spec->catdir(dirname(__FILE__))],
-            );
-        },
-    );
 
     no Mouse;
+    use Encode;
 
     sub startup {
         my ($self) = @_;
 
-        $self->router->get('/' => sub {
+        $self->router->get('/byte-string' => sub {
             my ($self) = @_;
-            my $res;
+            $self->render(text => encode_utf8 'あいうえお');
+        });
 
-            $res = $self->render(text => 'ok');
-            is $res->code, 200;
-            is_deeply $res->body, ["ok"];
+        $self->router->get('/text-string' => sub {
+            my ($self) = @_;
+            $self->render(text => 'あいうえお');
+        });
 
-            $self->req->new_response(200, [], ['ok']);
+        $self->router->get('/override-status' => sub {
+            my ($self) = @_;
+            $self->render(text => 'あいうえお', status => 500);
+        });
+
+        $self->router->get('/override-type' => sub {
+            my ($self) = @_;
+            $self->render(text => 'あいうえお', type => "text/html; charset=UTF-8");
+        });
+
+        $self->router->get('/override-format' => sub {
+            my ($self) = @_;
+            $self->render(text => 'あいうえお', format => "html");
         });
     }
 }
 
-my $app = eval { MyApp->to_psgi() };
+my $app = eval { MyApp->to_psgi };
 ok !$@;
 
 test_psgi
     app => $app,
     client => sub {
         my $cb = shift;
-        my $res = $cb->(GET '/');
-        is $res->code, 200;
+
+        subtest 'argument byte-string' => sub {
+            my $res = $cb->(GET '/byte-string');
+            is $res->code, 200;
+            isnt $res->content, encode_utf8 "あいうえお";
+        };
+
+        subtest 'argument text-string' => sub {
+            my $res = $cb->(GET '/text-string');
+            is $res->code, 200;
+            is $res->headers->header('Content-Type'), "text/plain; charset=UTF-8";
+
+            my $content = encode_utf8 "あいうえお";
+            is $res->content, $content;
+            is $res->content_length, length($content);
+        };
+
+        subtest 'status is 500' => sub {
+            my $res = $cb->(GET '/override-status');
+            is $res->code, 500;
+        };
+
+        subtest 'type is "text/html; charset=UTF-8"' => sub {
+            my $res = $cb->(GET '/override-type');
+            is $res->headers->header('Content-Type'), "text/html; charset=UTF-8";
+        };
+
+        subtest 'format is html' => sub {
+            my $res = $cb->(GET '/override-format');
+            is $res->headers->header('Content-Type'), "text/html; charset=UTF-8";
+        };
     };
 
 done_testing;
