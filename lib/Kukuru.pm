@@ -47,7 +47,7 @@ no Mouse;
 sub BUILD {
     my ($self) = @_;
 
-    # autobuild controller if fail load "app_controller_class"
+    # auto-build controller if fail load "app_controller_class"
     if (Mouse::Util::_try_load_one_class($self->app_controller_class)) {
         my $meta = Mouse->init_meta(for_class => $self->app_controller_class);
         $meta->superclasses($self->controller_class);
