@@ -21,6 +21,7 @@ sub handler {
     $output =~ s!([+<>])!$_ESCAPE{$1}!g;
 
     my $user_agent = $c->req->user_agent || '';
+    my $charset    = $c->req->encoding->mime_name;
 
     # defense from JSON hijacking
     if (
@@ -30,22 +31,24 @@ sub handler {
         ($c->req->method||'GET') eq 'GET'
     ) {
         my $res = $c->req->new_response(403);
-        $res->content_type('text/plain; charset=utf-8');
+        $res->content_type("text/plain; charset=$charset");
         $res->content(<<"..."
 Your request may be JSON hijacking.
 If you are not an attacker, please add 'X-Requested-With' header to each request.
 ...
         );
+        $res->content_length(length($res->content));
         return $res;
     }
 
     # add UTF-8 BOM if the client is Safari
-    if ( $user_agent =~ m/Safari/ and $encoding eq 'utf-8' ) {
+    if ($user_agent =~ m/Safari/ and $charset eq 'UTF-8') {
         $output = "\xEF\xBB\xBF" . $output;
     }
 
-    my $charset = $c->req->encoding->mime_name;
+    $output = $c->req->encoding->encode($output);
     my $headers = [
+        "Content-Length"         => length($output),
         "Content-Type"           => "application/json; charset=$charset",
         "X-Content-Type-Options" => "nosniff",
     ];
