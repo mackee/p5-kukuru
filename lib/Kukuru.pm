@@ -10,6 +10,7 @@ use Kukuru::Controller;
 use Kukuru::Router;
 use Kukuru::Util;
 use Kukuru::Renderer;
+use Kukuru::Transaction;
 
 use Mouse;
 
@@ -64,20 +65,9 @@ sub BUILD {
 
     if ($self->lint) {
         # lint your application routes
-        my $routes = $self->router->routes;
-        for my $route (@$routes) {
-            my $controller = $route->{dest}->{controller} or next;
-            my $action = $route->{dest}{action};
-            my $klass  = Kukuru::Util::load_class($controller, $self->app_controller_class);
-
-            if (!($self->app_controller_class ~~ [$klass->meta->superclasses])) {
-                Carp::croak(qq!"$klass" must extend "@{[$self->app_controller_class]}"!);
-            }
-
-            if (!$klass->can($action)) {
-                Carp::croak(qq!Undefined action &${klass}::$action!);
-            }
-        }
+        # - app_controller_classにKukuru::Controllerが継承されているか
+        # - Controllerにextendsされているか
+        # - Controllerの中にactionがあるか
     }
 }
 
@@ -88,16 +78,12 @@ sub to_psgi {
     sub {
         my $env   = shift;
         my $match = $self->router->match($env);
-        my $klass = $self->select_controller_class($match);
-
-        my $c = $klass->new(
+        my $tx = Kukuru::Transaction->new(
             app   => $self,
             req   => $self->request_class->new($env),
             match => $match,
         );
-
-        # response to psgi spec
-        $c->dispatch($match)->finalize;
+        $tx->dispatch->finalize;
     };
 }
 
@@ -117,19 +103,6 @@ sub emit_hook {
     my ($self, $name, @args) = @_;
     for my $code (@{$self->hooks->{$name}}) {
         $code->($self, @args);
-    }
-}
-
-sub select_controller_class {
-    my ($self, $match) = @_;
-
-    if ($match && $match->{controller}) {
-        Kukuru::Util::load_class(
-            $match->{controller}, $self->app_controller_class
-        );
-    }
-    else {
-        $self->app_controller_class;
     }
 }
 

@@ -4,7 +4,7 @@ use warnings;
 
 use Mouse;
 
-has [qw(app req)] => (
+has [qw(tx)] => (
     is => 'rw',
     required => 1,
 );
@@ -14,6 +14,9 @@ has match => (
 );
 
 no Mouse;
+
+sub req { shift->tx->req }
+sub app { shift->tx->app }
 
 # TODO: render_*
 # render_template, render_action, render_file, render_data, render_text
@@ -42,7 +45,7 @@ sub redirect {
     if (ref $uri eq 'ARRAY') {
         $uri = $self->uri_with($uri);
     }
-    elsif ($uri =~ m/^\//) {
+    else {
         $uri = $self->uri_for($uri);
     }
 
@@ -78,29 +81,33 @@ sub uri_with {
 sub param     { shift->req->param(@_)     }
 sub param_raw { shift->req->param_raw(@_) }
 sub session   { shift->req->session(@_)   }
-sub flash     {} # $self->dispatchであれこれする必要ある
+sub flash     {} # app->to_psgiであれこれする必要ある. P::Mで消えないかのチェックも必要だね
 
-sub dispatch { # たぶん、render_actionに名前変える
+sub dispatch {
     my ($self, $match) = @_;
+    # $match # => {:controller => Str, :action => Str || CodeRef}
 
     if ($match) {
         my $action = $match->{action};
 
-        if (ref $action eq 'ARRAY') {
-            for my $args (@$action) {
-                my $res = $self->dispatch($args);
-                return $res if $res;
-            }
-        }
-        elsif (ref $action eq 'CODE') {
+        if (ref $action eq 'CODE') {
             $action->($self);
         }
-        else {
+        elsif ($self->can($action)) {
             $self->$action();
+        }
+        else {
+            $self->render(
+                code => 404,
+                text => "Not Found Action($action)",
+            );
         }
     }
     else {
-        $self->req->new_response(404, [], ['Not Found Page']);
+        $self->render(
+            code => 404,
+            text => 'Not Found Page',
+        );
     }
 }
 
