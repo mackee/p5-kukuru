@@ -91,7 +91,7 @@ sub load_plugin {
     my ($self, $plugin, $options) = @_;
     my $klass = Kukuru::Util::load_class($plugin, 'Kukuru::Plugin');
 
-    $klass->init($self, $options);
+    $klass->init($self, $options || {});
 }
 
 sub add_hook {

@@ -66,6 +66,8 @@ sub add_child {
 }
 
 sub load_routes {
+    # TODO: my @routes = Kukuru::Util::find_routes(useall 'MyApp::Routes');
+    # $router->add_child($_) for @routes;
     my ($self, @apps) = @_;
 
     for my $app_class (@apps) {

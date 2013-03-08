@@ -34,20 +34,6 @@ subtest '_build_dest' => sub {
     ]};
 };
 
-subtest 'add_route' => sub {
-    my $router = Kukuru::Router->new;
-    my $dest = $router->add_route(
-        GET => '/',
-        'Root#index',
-        {on_match => sub {}},
-    );
-
-    is @{$router->routes}, 1;
-    my $route = $router->routes->[0];
-
-    is_deeply $route->{dest}, {controller => 'Root', action => 'index'};
-    ok $route->{on_match};
-};
 
 subtest 'get, options, patch, post, put, del' => sub {
     my $router = Kukuru::Router->new;

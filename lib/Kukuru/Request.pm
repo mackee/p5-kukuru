@@ -8,13 +8,13 @@ use Kukuru::Response;
 
 sub body_parameters {
     my ($self) = @_;
-    $self->{'kukuru.body_parameters'} ||=
+    $self->env->{'kukuru.request.body'} ||=
         $self->_decode_parameters($self->SUPER::body_parameters());
 }
 
 sub query_parameters {
     my ($self) = @_;
-    $self->{'kukuru.query_parameters'} ||=
+    $self->env->{'kukuru.request.query'} ||=
         $self->_decode_parameters($self->SUPER::query_parameters());
 }
 
