@@ -11,6 +11,7 @@ use Kukuru::Router;
 use Kukuru::Util;
 use Kukuru::Renderer;
 use Kukuru::Transaction;
+use Kukuru::Exception;
 
 use Mouse;
 
@@ -110,6 +111,7 @@ sub startup {}
 
 sub request_class    { 'Kukuru::Request'    }
 sub controller_class { 'Kukuru::Controller' }
+sub exception_class  { 'Kukuru::Exception' }
 
 sub app_controller_class { shift->meta->name."::Controller" }
 
