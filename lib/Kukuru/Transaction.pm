@@ -58,24 +58,3 @@ sub select_controller_class {
 
 
 1;
-__END__
-
-$self->_dispatch({
-    action => [
-        {
-            controller => 'Root',
-            action     => 'index',
-        },
-        {
-            controller => 'Root',
-            action     => 'index2',
-        },
-    ],
-});
-
-$self->_dispatch({
-    controller => 'Root',
-    action     => 'index',
-});
-
-=cut
