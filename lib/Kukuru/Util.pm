@@ -5,15 +5,15 @@ use Mouse::Util;
 use Plack::MIME;
 
 sub load_class {
-    my ($class, $prefix) = @_;
+    my ($klass, $prefix) = @_;
 
     if ($prefix) {
-        unless ($class =~ s/^\+// || $class =~ /^$prefix/) {
-            $class = "$prefix\::$class";
+        unless ($klass =~ s/^\+// || $klass =~ /^$prefix/) {
+            $klass = "$prefix\::$klass";
         }
     }
 
-    Mouse::Util::load_class($class);
+    Mouse::Util::load_class($klass);
 }
 
 sub find_content_type {
@@ -28,6 +28,12 @@ sub find_content_type {
     $type .= "; charset=$charset" if $charset;
 
     $type;
+}
+
+sub try_load_one_class {
+    my ($klass) = @_;
+
+    Mouse::Util::_try_load_one_class($klass);
 }
 
 1;
