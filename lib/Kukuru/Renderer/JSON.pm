@@ -1,4 +1,4 @@
-package Kukuru::Renderer::Handler::JSON;
+package Kukuru::Renderer::JSON;
 use strict;
 use warnings;
 use JSON 2 ();

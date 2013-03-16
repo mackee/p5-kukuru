@@ -9,7 +9,7 @@ use Kukuru::Request;
 use Kukuru::Controller;
 use Kukuru::Router;
 use Kukuru::Util;
-use Kukuru::Renderer;
+use Kukuru::ResponseBuilder;
 use Kukuru::Transaction;
 
 use Mouse;
@@ -29,9 +29,9 @@ has hooks => (
     default => sub { +{} },
 );
 
-has renderer => (
+has response_builder => ( # response_builder
     is => 'rw',
-    default => sub { Kukuru::Renderer->new }
+    default => sub { Kukuru::ResponseBuilder->new }
 );
 
 has template_engine => (

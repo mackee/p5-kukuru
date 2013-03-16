@@ -32,7 +32,7 @@ sub render {
         $vars{template} = $template;
     }
 
-    $self->app->renderer->render($self, %vars);
+    $self->app->response_builder->render($self, %vars);
 }
 
 # TODO: send_*系

@@ -13,7 +13,7 @@ use Test::More;
 
     sub startup {
         my $self = shift;
-        $self->renderer->add_handler(template => sub {
+        $self->response_builder->add_handler(template => sub {
             my $c = shift;
             +{@_}
         });
