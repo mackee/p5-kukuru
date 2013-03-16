@@ -7,7 +7,7 @@ use Kukuru::Renderer;
 subtest 'default_handler' => sub {
     my $renderer = Kukuru::Renderer->new;
 
-    is $renderer->default_handler, 'tiffany';
+    is $renderer->default_handler, 'template';
 };
 
 done_testing;

@@ -2,7 +2,7 @@ package Kukuru::Renderer;
 use strict;
 use warnings;
 
-use Kukuru::Renderer::Handler::Tiffany;
+use Kukuru::Renderer::Handler::Template;
 use Kukuru::Renderer::Handler::Text;
 use Kukuru::Renderer::Handler::JSON;
 use Kukuru::Renderer::Handler::Data;
@@ -17,7 +17,7 @@ has handlers => (
 
 has default_handler => (
     is => 'rw',
-    default => 'tiffany',
+    default => 'template',
 );
 
 no Mouse;
@@ -25,10 +25,10 @@ no Mouse;
 sub BUILD {
     my ($self) = @_;
 
-    $self->add_handler(tiffany => \&Kukuru::Renderer::Handler::Tiffany::handler);
-    $self->add_handler(text    => \&Kukuru::Renderer::Handler::Text::handler);
-    $self->add_handler(json    => \&Kukuru::Renderer::Handler::JSON::handler);
-    $self->add_handler(data    => \&Kukuru::Renderer::Handler::Data::handler);
+    $self->add_handler(template => \&Kukuru::Renderer::Handler::Template::handler);
+    $self->add_handler(text     => \&Kukuru::Renderer::Handler::Text::handler);
+    $self->add_handler(json     => \&Kukuru::Renderer::Handler::JSON::handler);
+    $self->add_handler(data     => \&Kukuru::Renderer::Handler::Data::handler);
 
     # TODO
     # $self->add_handler(action => \&_action);

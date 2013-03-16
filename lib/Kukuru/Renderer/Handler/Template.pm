@@ -1,4 +1,4 @@
-package Kukuru::Renderer::Handler::Tiffany;
+package Kukuru::Renderer::Handler::Template;
 use strict;
 use warnings;
 

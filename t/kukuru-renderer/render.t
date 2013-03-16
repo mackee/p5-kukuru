@@ -8,11 +8,11 @@ subtest 'render with template' => sub {
     my $renderer = Kukuru::Renderer->new;
 
     my $count = 0;
-    $renderer->add_handler(tiffany => sub {
+    $renderer->add_handler(template => sub {
         my ($c, %vars) = @_;
 
         $count++;
-        is $vars{handler},  'tiffany';
+        is $vars{handler},  'template';
         is $vars{template}, 'root/index';
     });
 
