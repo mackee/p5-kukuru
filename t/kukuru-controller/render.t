@@ -13,7 +13,7 @@ use Test::More;
 
     sub startup {
         my $self = shift;
-        $self->renderer->add_handler(tiffany => sub {
+        $self->renderer->add_handler(template => sub {
             my $c = shift;
             +{@_}
         });
@@ -37,7 +37,7 @@ subtest 'with template' => sub {
 
     my $args =  $c->render(template => 'root/index');
     is $args->{template}, 'root/index';
-    is $args->{handler}, 'tiffany';
+    is $args->{handler}, 'template';
 };
 
 subtest 'only path' => sub {
@@ -45,7 +45,7 @@ subtest 'only path' => sub {
 
     my $args =  $c->render('root/index');
     is $args->{template}, 'root/index';
-    is $args->{handler}, 'tiffany';
+    is $args->{handler}, 'template';
 };
 
 subtest 'path with vars' => sub {
