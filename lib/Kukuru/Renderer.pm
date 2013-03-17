@@ -2,10 +2,10 @@ package Kukuru::Renderer;
 use strict;
 use warnings;
 
-use Kukuru::Renderer::Handler::Template;
-use Kukuru::Renderer::Handler::Text;
-use Kukuru::Renderer::Handler::JSON;
-use Kukuru::Renderer::Handler::Data;
+use Kukuru::Renderer::Template;
+use Kukuru::Renderer::Text;
+use Kukuru::Renderer::JSON;
+use Kukuru::Renderer::Data;
 
 use Mouse;
 use Carp ();
@@ -25,10 +25,10 @@ no Mouse;
 sub BUILD {
     my ($self) = @_;
 
-    $self->add_handler(template => \&Kukuru::Renderer::Handler::Template::handler);
-    $self->add_handler(text     => \&Kukuru::Renderer::Handler::Text::handler);
-    $self->add_handler(json     => \&Kukuru::Renderer::Handler::JSON::handler);
-    $self->add_handler(data     => \&Kukuru::Renderer::Handler::Data::handler);
+    $self->add_handler(template => \&Kukuru::Renderer::Template::handler);
+    $self->add_handler(text     => \&Kukuru::Renderer::Text::handler);
+    $self->add_handler(json     => \&Kukuru::Renderer::JSON::handler);
+    $self->add_handler(data     => \&Kukuru::Renderer::Data::handler);
 
     # TODO
     # $self->add_handler(action => \&_action);
