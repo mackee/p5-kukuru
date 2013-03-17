@@ -22,8 +22,8 @@ subtest 'build_handler with handler' => sub {
 
 subtest 'build_handler with default_handler' => sub {
     my $r = Kukuru::Renderer->new;
-    my $handler = $r->build_handler();
-    is $handler, 'template';
+    eval { $r->build_handler() };
+    like $@, qr/No handler/;
 };
 
 done_testing;

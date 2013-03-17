@@ -15,11 +15,6 @@ has handlers => (
     default => sub { +{} },
 );
 
-has default_handler => (
-    is => 'rw',
-    default => 'template',
-);
-
 no Mouse;
 
 sub BUILD {
@@ -53,12 +48,17 @@ sub build_handler {
     my ($self, %vars) = @_;
     return $vars{handler} if $vars{handler};
 
-    my $handler = $vars{json} ? 'json' :
-                  $vars{text} ? 'text' :
-                  $vars{file} ? 'file' :
-                  $vars{data} ? 'data' : undef;
+    my $handler = $vars{template} ? 'template' :
+                  $vars{json}     ? 'json'     :
+                  $vars{text}     ? 'text'     :
+                  $vars{file}     ? 'file'     :
+                  $vars{data}     ? 'data'     : undef;
 
-    return $handler || $self->default_handler;
+    if (!$handler) {
+        Carp::croak("No handler.");
+    }
+
+    return $handler;
 }
 
 __PACKAGE__->meta->make_immutable;
