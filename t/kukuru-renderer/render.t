@@ -2,13 +2,13 @@ use strict;
 use warnings;
 use utf8;
 use Test::More;
-use Kukuru::ResponseBuilder;
+use Kukuru::Renderer;
 
 subtest 'render with template' => sub {
-    my $response_builder = Kukuru::ResponseBuilder->new;
+    my $renderer = Kukuru::Renderer->new;
 
     my $count = 0;
-    $response_builder->add_handler(template => sub {
+    $renderer->add_handler(template => sub {
         my ($c, %vars) = @_;
 
         $count++;
@@ -18,15 +18,15 @@ subtest 'render with template' => sub {
 
     my $c = 'dummy';
     is $count, 0;
-    $response_builder->render($c, template => 'root/index');
+    $renderer->render($c, template => 'root/index');
     is $count, 1;
 };
 
 subtest 'render with hander' => sub {
-    my $response_builder = Kukuru::ResponseBuilder->new;
+    my $renderer = Kukuru::Renderer->new;
 
     my $count = 0;
-    $response_builder->add_handler(test => sub {
+    $renderer->add_handler(test => sub {
         my ($c, %vars) = @_;
 
         $count++;
@@ -34,15 +34,15 @@ subtest 'render with hander' => sub {
 
     my $c = 'dummy';
     is $count, 0;
-    $response_builder->render($c, handler => 'test');
+    $renderer->render($c, handler => 'test');
     is $count, 1;
 };
 
 subtest 'render without handler' => sub {
-    my $response_builder = Kukuru::ResponseBuilder->new;
+    my $renderer = Kukuru::Renderer->new;
 
     my $c = 'dummy';
-    eval { $response_builder->render($c, handler => 'hisaichi5518') };
+    eval { $renderer->render($c, handler => 'hisaichi5518') };
     like $@, qr/No handler for "hisaichi5518" available/;
 };
 

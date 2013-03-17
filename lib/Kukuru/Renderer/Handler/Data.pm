@@ -1,4 +1,4 @@
-package Kukuru::Renderer::Data;
+package Kukuru::Renderer::Handler::Data;
 use strict;
 use warnings;
 use Carp ();
