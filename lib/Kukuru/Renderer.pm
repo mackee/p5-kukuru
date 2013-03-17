@@ -29,15 +29,11 @@ sub BUILD {
     $self->add_handler(text     => \&Kukuru::Renderer::Text::handler);
     $self->add_handler(json     => \&Kukuru::Renderer::JSON::handler);
     $self->add_handler(data     => \&Kukuru::Renderer::Data::handler);
-
-    # TODO
-    # $self->add_handler(action => \&_action);
 }
 
 sub add_handler {
     my ($self, $name, $code) = @_;
 
-    # TODO: 既に存在していたら警告orエラー
     $self->handlers->{$name} = $code;
 }
 
