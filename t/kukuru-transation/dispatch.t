@@ -14,6 +14,7 @@ use Test::More;
     sub index {
         my ($self) = @_;
         $self->tx->{run_controller}++;
+        $self->render(text => "ok");
     }
 }
 
