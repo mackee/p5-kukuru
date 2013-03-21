@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 use Kukuru::Renderer::Template;
+use Kukuru::Renderer::Exception;
 use Kukuru::Renderer::Text;
 use Kukuru::Renderer::JSON;
 use Kukuru::Renderer::Data;
@@ -24,6 +25,8 @@ sub BUILD {
     $self->add_handler(text     => \&Kukuru::Renderer::Text::handler);
     $self->add_handler(json     => \&Kukuru::Renderer::JSON::handler);
     $self->add_handler(data     => \&Kukuru::Renderer::Data::handler);
+
+    $self->add_handler(exception => \&Kukuru::Renderer::Exception::handler);
 }
 
 sub add_handler {
@@ -49,6 +52,7 @@ sub build_handler {
     return $vars{handler} if $vars{handler};
 
     my $handler = $vars{template} ? 'template' :
+                  $vars{exception}? 'exception':
                   $vars{json}     ? 'json'     :
                   $vars{text}     ? 'text'     :
                   $vars{file}     ? 'file'     :
