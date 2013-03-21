@@ -8,18 +8,25 @@ has [qw/message file line/] => (
     is => 'rw',
 );
 
+has status => (
+    is => 'rw',
+    default => 500,
+);
+
 no Mouse;
 
 sub throw {
     my ($class, %args) = @_;
     my $message = $args{message};
+    my $status  = $args{status};
     my $file    = $args{file};
     my $line    = $args{line};
 
     die $class->new(
         message => $message,
-        file    => $file,
-        line    => $line,
+        ($status ? (status  => $status) : ()),
+        ($file   ? (file    => $file)   : ()),
+        ($line   ? (line    => $line)   : ()),
     );
 }
 
@@ -29,6 +36,7 @@ sub croak {
     my @caller = caller(1);
     $class->throw(
         message => $message || 'Died.',
+        status  => 500,
         file    => $caller[1],
         line    => $caller[2],
     );
@@ -43,7 +51,13 @@ sub croakf {
 }
 sub stringify {
     my ($self) = @_;
-    sprintf '%s at %s line %d.', $self->message, $self->file, $self->line;
+
+    if ($self->file && $self->line) {
+        sprintf '%s at %s line %d.', $self->message, $self->file, $self->line;
+    }
+    else {
+        sprintf '%s', $self->message;
+    }
 }
 
 __PACKAGE__->meta->make_immutable;
