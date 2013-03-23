@@ -116,3 +116,19 @@ sub exception_class  { 'Kukuru::Exception' }
 sub app_controller_class { shift->meta->name."::Controller" }
 
 __PACKAGE__->meta->make_immutable;
+
+__END__
+
+=head1 NAME
+
+Kururu - Web Framework
+
+=head1 AUTHOR
+
+hisaichi5518 <hisaichi5518 __at__ moe-project.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (c) 2013 hisaichi5518 All rights reserved.
+
+=cut
