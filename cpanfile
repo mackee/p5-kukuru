@@ -5,6 +5,7 @@ requires "Plack" => "1.0018";
 requires "Data::Util" => "0.60";
 requires "JSON" => "2.53";
 requires "Router::Simple" => "0.14";
+requires "Text::Xslate" => "2.0000";
 
 on "author" => sub {
     requires "Module::Install::CPANfile";
