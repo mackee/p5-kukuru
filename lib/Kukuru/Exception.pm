@@ -49,6 +49,7 @@ sub croakf {
     @_ = ($self, sprintf $format, @args);
     goto \&croak;
 }
+
 sub stringify {
     my ($self) = @_;
 
