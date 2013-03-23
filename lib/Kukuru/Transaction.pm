@@ -30,16 +30,16 @@ sub dispatch {
 
     $self->app->emit_hook("before_dispatch", $self);
     my $res = eval { $self->_dispatch($match) };
-    if ($@) {
-        if ((ref $@ || '') eq $self->app->exception_class) {
+    if (my $e = $@) {
+        if ((ref $e || '') eq $self->app->exception_class) {
             my $c = $self->_last_controller_object;
             $res = $c->render(
-                exception => $@->stringify,
-                status    => $@->status,
+                exception => $e->stringify,
+                status    => $e->status,
             );
         }
         else {
-            die $@;
+            die $e;
         }
     }
     elsif (!$res) {
