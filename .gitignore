@@ -1,5 +1,6 @@
 ^Kukuru-*
 .*
+!.travis.yml
 !.gitignore
 !.shipit
 *.o
