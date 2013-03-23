@@ -86,29 +86,27 @@ sub flash     {} # app->to_psgiであれこれする必要ある. P::Mで消え�
 sub dispatch {
     my ($self, $match) = @_;
     # $match # => {:controller => Str, :action => Str || CodeRef}
-
     if ($match) {
         my $action = $match->{action};
 
-        if (ref $action eq 'CODE') {
-            $action->($self);
+        if ($action && ref $action eq 'CODE') {
+            return $action->($self);
         }
-        elsif ($self->can($action)) {
-            $self->$action();
+        elsif ($action && $self->can($action)) {
+            return $self->$action();
         }
-        else {
-            $self->render(
+        elsif ($action) {
+            return $self->render(
                 code => 404,
                 text => "Not Found Action($action)",
             );
         }
     }
-    else {
-        $self->render(
-            code => 404,
-            text => 'Not Found Page',
-        );
-    }
+
+    $self->render(
+        code => 404,
+        text => 'Not Found Page',
+    );
 }
 
 __PACKAGE__->meta->make_immutable;

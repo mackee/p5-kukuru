@@ -67,6 +67,13 @@ subtest 'action is String, but not_found action' => sub {
     is $res->content->[0], "Not Found Action(not_found)";
 };
 
+subtest 'action is empty' => sub {
+    my $c = MyApp::Controller::Root->new(tx => tx());
+
+    my $res = $c->dispatch({});
+    is $res->content->[0], "Not Found Page";
+};
+
 subtest 'no match' => sub {
     my $c = MyApp::Controller::Root->new(tx => tx());
 
