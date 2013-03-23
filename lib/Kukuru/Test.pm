@@ -13,14 +13,15 @@ sub test_app {
     my $client   = $args{client} or croak 'client test code needed';
     my $impl     = $args{impl};
     my $app_name = ref $app;
+    my $package  = __PACKAGE__;
 
     my $tx;
-    if (!$app->{__added_hook_for_test}) {
+    if (!$app->{$package}{added_hook_for_test}) {
         unshift @{$app->hooks->{after_build_tx} ||= []}, sub {
             $tx = $_[1];
         };
 
-        $app->{__added_hook_for_test}++;
+        $app->{$package}{added_hook_for_test}++;
     }
 
     $args{client} = sub {
