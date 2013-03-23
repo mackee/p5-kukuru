@@ -4,7 +4,9 @@ perl:
   - "5.14"
   - "5.12"
   - "5.10"
-before_install: "cpanm Module::Install::CPANfile"
+before_install:
+    - "cpanm Module::Install::CPANfile"
+    - "cpanm --installdeps ."
 install: "perl Makefile.PL"
 script: "make test"
 notifications:
