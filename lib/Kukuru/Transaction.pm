@@ -19,10 +19,16 @@ has _controllers => (
 
 no Mouse;
 
+sub BUILD {
+    my ($self) = @_;
+    $self->app->emit_hook("after_build_tx", $self);
+}
+
 sub dispatch {
     my ($self) = @_;
     my $match = $self->match;
 
+    $self->app->emit_hook("before_dispatch", $self);
     my $res = eval { $self->_dispatch($match) };
     if ($@) {
         if ((ref $@ || '') eq $self->app->exception_class) {
@@ -39,6 +45,7 @@ sub dispatch {
     elsif (!$res) {
         die "Can't found response object in action.";
     }
+    $self->app->emit_hook("after_dispatch", $self, $res);
 
     $res;
 }
