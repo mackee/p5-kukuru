@@ -34,7 +34,7 @@ sub dispatch {
         if ((ref $@ || '') eq $self->app->exception_class) {
             my $c = $self->_last_controller_object;
             $res = $c->render(
-                exception => $@->message,
+                exception => $@->stringify,
                 status    => $@->status,
             );
         }
