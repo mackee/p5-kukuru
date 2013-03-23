@@ -5,6 +5,7 @@ use parent 'Plack::Request';
 use Carp ();
 use Encode;
 use Kukuru::Response;
+use Plack::Session;
 
 sub body_parameters {
     my ($self) = @_;
@@ -75,6 +76,17 @@ sub encoding {
 }
 
 sub new_response { shift;Kukuru::Response->new(@_) }
+
+sub session {
+    my ($self) = @_;
+    $self->{session} ||= Plack::Session->new($self->env);
+}
+
+sub _has_session {
+    my ($self) = @_;
+
+    $self->env->{'psgix.session'} ? 1 : 0;
+}
 
 sub _decode_parameters {
     my ($self, $stuff) = @_;
