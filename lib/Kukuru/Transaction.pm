@@ -1,5 +1,6 @@
 package Kukuru::Transaction;
 use Mouse;
+use Scalar::Util;
 
 has [qw/app req/] => (
     is => 'rw',
@@ -11,13 +12,35 @@ has match => (
     default => sub { +{} },
 );
 
+has _controllers => (
+    is =>  'rw',
+    default => sub { +[] },
+);
+
 no Mouse;
 
 sub dispatch {
     my ($self) = @_;
     my $match = $self->match;
 
-    $self->_dispatch($match);
+    my $res = eval { $self->_dispatch($match) };
+    if ($@) {
+        if ((ref $@ || '') eq $self->app->exception_class) {
+            my $c = $self->_last_controller_object;
+            $res = $c->render(
+                exception => $@->message,
+                status    => $@->status,
+            );
+        }
+        else {
+            die $@;
+        }
+    }
+    elsif (!$res) {
+        die "Can't found response object in action.";
+    }
+
+    $res;
 }
 
 sub _dispatch {
@@ -39,8 +62,16 @@ sub _dispatch {
             args => $match, # 名前考える
         );
 
+        Scalar::Util::weaken($c->{tx});
+
+        push @{$self->_controllers}, $c;
         $c->dispatch($match);
     }
+}
+
+sub _last_controller_object {
+    my ($self) = @_;
+    $self->_controllers->[scalar(@{$self->_controllers}) - 1];
 }
 
 sub select_controller_class {
@@ -56,5 +87,4 @@ sub select_controller_class {
     }
 }
 
-
-1;
+__PACKAGE__->meta->make_immutable;
