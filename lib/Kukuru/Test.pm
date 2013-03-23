@@ -6,6 +6,7 @@ use Carp;
 use Plack::Test;
 
 our @EXPORT = qw(test_app);
+our $_tx;
 
 sub test_app {
     my (%args) = @_;
@@ -15,10 +16,10 @@ sub test_app {
     my $app_name = ref $app;
     my $package  = __PACKAGE__;
 
-    my $tx;
+    local $_tx;
     if (!$app->{$package}{added_hook_for_test}) {
         unshift @{$app->hooks->{after_build_tx} ||= []}, sub {
-            $tx = $_[1];
+            $_tx = $_[1];
         };
 
         $app->{$package}{added_hook_for_test}++;
@@ -30,7 +31,7 @@ sub test_app {
             my $req = shift;
             my $res = $callback->($req);
 
-            return ($res, $tx);
+            return ($res, $_tx);
         };
 
         $client->($cb)
