@@ -26,3 +26,4 @@ cover_db*
 misc/*
 benchmark/result.txt
 sandbox/*
+META.json
