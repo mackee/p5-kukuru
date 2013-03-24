@@ -118,15 +118,15 @@ sub dispatch {
         }
         elsif ($action) {
             return $self->render(
-                code => 404,
-                text => "Not Found Action($action)",
+                status => 404,
+                text   => "Not Found Action($action)",
             );
         }
     }
 
     $self->render(
-        code => 404,
-        text => 'Not Found Page',
+        status => 404,
+        text   => 'Not Found Page',
     );
 }
 
