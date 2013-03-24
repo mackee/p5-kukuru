@@ -16,7 +16,7 @@ on test => sub {
 on configure => sub {
     requires 'Module::Build' => 0.4003;
     requires 'Module::Build::Pluggable';
-    requires 'Module::Build::Pluggable::GithubMeta';
     requires 'Module::Build::Pluggable::CPANfile';
+    requires 'Module::Build::Pluggable::GithubMeta';
     requires 'Module::Build::Pluggable::ReadmeMarkdownFromPod';
 };
