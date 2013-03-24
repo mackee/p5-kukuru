@@ -28,6 +28,13 @@ sub dispatch {
     my ($self) = @_;
     my $match = $self->match;
 
+    # for flash
+    if ($self->req->_has_session) {
+        $self->req->session->remove('__kukuru_flash');
+        my $val = $self->req->session->remove('__kukuru_flash_new');
+        $self->req->session->set('__kukuru_flash' => $val) if $val;
+    }
+
     $self->app->emit_hook("before_dispatch", $self);
     my $res = eval { $self->_dispatch($match) };
     if (my $e = $@) {

@@ -2,6 +2,7 @@ package Kukuru::Controller;
 use strict;
 use warnings;
 
+use Carp ();
 use Mouse;
 
 has [qw(tx)] => (
@@ -81,7 +82,27 @@ sub uri_with {
 sub param     { shift->req->param(@_)     }
 sub param_raw { shift->req->param_raw(@_) }
 sub session   { shift->req->session(@_)   }
-sub flash     {} # app->to_psgiであれこれする必要ある. P::Mで消えないかのチェックも必要だね
+
+sub flash {
+    my ($self, $key, $val) = @_;
+
+    my $now_key = '__kukuru_flash';
+    my $now_val = $self->session->get($now_key) || {};
+
+    if (defined $key && defined $val) {
+        my $new_key = '__kukuru_flash_new';
+        my $new_val = $self->session->get($new_key) || {};
+
+        $new_val->{$key} = $val;
+        $self->session->set($new_key => $new_val);
+        return $new_val->{$key};
+    }
+    elsif (defined $key) {
+        return $now_val->{$key};
+    }
+
+    Carp::croak('need key for flash');
+}
 
 sub dispatch {
     my ($self, $match) = @_;
