@@ -6,10 +6,9 @@ perl:
   - "5.10"
 before_install: "cpanm --installdeps ."
 install:
-    - "perl ./Build.PL"
-    - "Build"
+    - "perl Makefile.PL"
 script:
-    - "./Build test"
+    - "make test"
 notifications:
   email:
     - herarans@gmail.com
