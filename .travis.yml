@@ -5,7 +5,7 @@ perl:
   - "5.12"
   - "5.10"
 before_install:
-    - "cpanm Module::Build::Pluggable"
+    - "cpanm Module::Build::Pluggable Module::Build::CPANfile Module::Build::GithubMeta:: Module::Built::ReadmeMarkdownFromPod"
     - "perl Build.PL"
 install:
     - "./Build"
