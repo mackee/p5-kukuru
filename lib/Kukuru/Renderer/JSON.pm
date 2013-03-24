@@ -11,7 +11,7 @@ my %_ESCAPE = (
 );
 
 sub handler {
-    my ($c, %vars) = @_;
+    my ($tx, $c, %vars) = @_;
     my $stuff  = $vars{json};
     my $status = $vars{status} || 200;
 
@@ -20,17 +20,17 @@ sub handler {
     my $output = $_JSON->encode($stuff);
     $output =~ s!([+<>])!$_ESCAPE{$1}!g;
 
-    my $user_agent = $c->req->user_agent || '';
-    my $charset    = $c->req->encoding->mime_name;
+    my $user_agent = $tx->req->user_agent || '';
+    my $charset    = $tx->req->encoding->mime_name;
 
     # defense from JSON hijacking
     if (
-        (!$c->req->header('X-Requested-With')) &&
+        (!$tx->req->header('X-Requested-With')) &&
         $user_agent =~ /android/i              &&
-        defined $c->req->header('Cookie')      &&
-        ($c->req->method||'GET') eq 'GET'
+        defined $tx->req->header('Cookie')      &&
+        ($tx->req->method||'GET') eq 'GET'
     ) {
-        my $res = $c->req->new_response(403);
+        my $res = $tx->req->new_response(403);
         $res->content_type("text/plain; charset=$charset");
         $res->content(<<"..."
 Your request may be JSON hijacking.
@@ -46,14 +46,14 @@ If you are not an attacker, please add 'X-Requested-With' header to each request
         $output = "\xEF\xBB\xBF" . $output;
     }
 
-    $output = $c->req->encoding->encode($output);
+    $output = $tx->req->encoding->encode($output);
     my $headers = [
-        @{$c->app->default_headers},
+        @{$tx->app->default_headers},
         "Content-Length" => length($output),
         "Content-Type"   => "application/json; charset=$charset",
     ];
 
-    $c->req->new_response($status, $headers, [$output]);
+    $tx->req->new_response($status, $headers, [$output]);
 }
 
 1;

@@ -14,7 +14,8 @@ use Test::More;
     sub startup {
         my $self = shift;
         $self->renderer->add_handler(template => sub {
-            my $c = shift;
+            my $tx = shift;
+            my $c  = shift;
             +{@_}
         });
     }

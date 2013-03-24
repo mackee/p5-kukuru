@@ -35,12 +35,19 @@ sub dispatch {
         $self->req->session->set('__kukuru_flash' => $val) if $val;
     }
 
-    $self->app->emit_hook("before_dispatch", $self);
-    my $res = eval { $self->_dispatch($match) };
+    my $res = eval {
+        my @codes = $self->app->find_hook_codes("before_dispatch");
+        for my $code (@codes) {
+            my $res = $code->($self->app, $self);
+            return $res if $res && blessed($res);
+        }
+
+        $self->_dispatch($match);
+    };
     if (my $e = $@) {
         if ((ref $e || '') eq $self->app->exception_class) {
-            my $c = $self->_last_controller_object;
-            $res = $c->render(
+            $res = $self->app->renderer->render(
+                $self, undef,
                 exception => $e->stringify,
                 status    => $e->status,
             );

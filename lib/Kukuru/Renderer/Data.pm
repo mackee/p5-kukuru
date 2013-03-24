@@ -6,7 +6,7 @@ use Plack::Util;
 use Kukuru::Util;
 
 sub handler {
-    my ($c, %vars) = @_;
+    my ($tx, $c, %vars) = @_;
     my $output = $vars{data};
     my $status = $vars{status} || 200;
     my $format = $vars{format} || "";
@@ -15,18 +15,18 @@ sub handler {
     if (!$content_type && $format) {
         $content_type = Kukuru::Util::find_content_type(
             format  => $format,
-            charset => $c->req->encoding->mime_name,
+            charset => $tx->req->encoding->mime_name,
         );
     }
     Carp::croak("need type/format") if !$content_type;
 
     my $headers = [
-        @{$c->app->default_headers},
+        @{$tx->app->default_headers},
         "Content-Length" => Plack::Util::content_length($output) || 0,
         "Content-Type"   => $content_type,
     ];
 
-    $c->req->new_response($status, $headers, $output);
+    $tx->req->new_response($status, $headers, $output);
 }
 
 1;

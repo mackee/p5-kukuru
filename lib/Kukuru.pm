@@ -113,9 +113,17 @@ sub add_hook {
 
 sub emit_hook {
     my ($self, $name, @args) = @_;
-    for my $code (@{$self->hooks->{$name}}) {
+    my @codes = $self->find_hook_codes($name);
+
+    for my $code (@codes) {
         $code->($self, @args);
     }
+}
+
+sub find_hook_codes {
+    my ($self, $name) = @_;
+
+    @{$self->hooks->{$name} || []};
 }
 
 sub startup {}
