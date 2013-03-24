@@ -33,7 +33,7 @@ sub tx {
     );
 }
 
-subtest 'before_dispatch, after_dispatch' => sub {
+subtest 'return response object at before_dispatch' => sub {
     my $tx = tx();
     my $res = $tx->dispatch();
     is_deeply $res->content, ["Forbidden"];
