@@ -116,3 +116,15 @@ sub exception_class  { 'Kukuru::Exception' }
 sub app_controller_class { shift->meta->name."::Controller" }
 
 __PACKAGE__->meta->make_immutable;
+__END__
+
+=head1 NAME
+
+Kukuru - yet anothor Web Application Framework
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
