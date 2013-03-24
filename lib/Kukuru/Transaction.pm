@@ -39,8 +39,8 @@ sub dispatch {
     my $res = eval { $self->_dispatch($match) };
     if (my $e = $@) {
         if ((ref $e || '') eq $self->app->exception_class) {
-            my $c = $self->_last_controller_object;
-            $res = $c->render(
+            $res = $self->app->renderer->render(
+                $self, undef,
                 exception => $e->stringify,
                 status    => $e->status,
             );

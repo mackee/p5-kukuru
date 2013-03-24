@@ -36,11 +36,11 @@ sub add_handler {
 }
 
 sub render {
-    my ($self, $c, %vars) = @_;
+    my ($self, $tx, $c, %vars) = @_;
 
     $vars{handler} ||= $self->build_handler(%vars);
     if (my $code = $self->handlers->{$vars{handler}}) {
-        $code->($c, %vars);
+        $code->($tx, $c, %vars);
     }
     else {
         Carp::croak(qq!No handler for "$vars{handler}" available.!);
