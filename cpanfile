@@ -5,7 +5,8 @@ requires 'parent' => 0.225;
 requires 'URI' => 1.59;
 requires 'Plack' => 0.9986;
 requires 'Plack::Middleware::Session' => 0.15;
-
+requires 'JSON::XS' => 2.32;
+requires 'Data::Util' => 0.59;
 
 on test => sub {
     requires 'Test::More' => 0.98;
