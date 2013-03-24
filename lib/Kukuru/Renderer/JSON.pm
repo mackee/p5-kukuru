@@ -48,9 +48,9 @@ If you are not an attacker, please add 'X-Requested-With' header to each request
 
     $output = $c->req->encoding->encode($output);
     my $headers = [
-        "Content-Length"         => length($output),
-        "Content-Type"           => "application/json; charset=$charset",
-        "X-Content-Type-Options" => "nosniff",
+        @{$c->app->default_headers},
+        "Content-Length" => length($output),
+        "Content-Type"   => "application/json; charset=$charset",
     ];
 
     $c->req->new_response($status, $headers, [$output]);

@@ -21,6 +21,7 @@ sub handler {
     Carp::croak("need type/format") if !$content_type;
 
     my $headers = [
+        @{$c->app->default_headers},
         "Content-Length" => Plack::Util::content_length($output) || 0,
         "Content-Type"   => $content_type,
     ];

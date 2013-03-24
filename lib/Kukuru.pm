@@ -44,6 +44,17 @@ has lint => (
     default => 1,
 );
 
+has default_headers => (
+    is => 'rw',
+    default => sub {
+        [
+            "X-XSS-Protection"       => "1; mode=block",
+            "X-Frame-Options"        => "SAMEORIGIN",
+            "X-Content-Type-Options" => "nosniff",
+        ];
+    },
+);
+
 no Mouse;
 
 sub BUILD {

@@ -20,6 +20,7 @@ sub handler {
 
     $output = $c->req->encoding->encode($output);
     my $headers = [
+        @{$c->app->default_headers},
         "Content-Type"   => $content_type,
         "Content-Length" => length($output),
     ];
