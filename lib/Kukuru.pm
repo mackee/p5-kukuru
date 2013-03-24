@@ -122,6 +122,10 @@ __END__
 
 Kukuru - yet anothor Web Application Framework
 
+=head1 AUTHOR
+
+hisaichi5518 E<lt>hisaichi5518 @ gmail.comE<gt>
+
 =head1 LICENSE
 
 This library is free software; you can redistribute it and/or modify

@@ -16,7 +16,9 @@ lib/Kukuru/Router.pm
 lib/Kukuru/Test.pm
 lib/Kukuru/Transaction.pm
 lib/Kukuru/Util.pm
+Makefile.PL
 MANIFEST			This list of files
+README.mkdn
 t/kukuru-controller/dispatch.t
 t/kukuru-controller/flash.t
 t/kukuru-controller/redirect.t
@@ -76,8 +78,8 @@ t/kukuru/exception_class.t
 t/kukuru/load_plugin.t
 t/kukuru/request_class.t
 t/kukuru/to_psgi/blessed_app.t
+xt/perlcritic.t
 README
+LICENSE
 META.yml
 META.json
-LICENSE
-Makefile.PL
