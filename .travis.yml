@@ -5,6 +5,7 @@ perl:
   - "5.12"
   - "5.10"
 before_install:
+    - "cpanm Module::Install::Pluggable"
     - "perl Build.PL"
 install:
     - "./Build"
