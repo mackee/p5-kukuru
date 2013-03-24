@@ -4,11 +4,10 @@ perl:
   - "5.14"
   - "5.12"
   - "5.10"
-before_install:
-    - "cpanm Module::Build::Pluggable Module::Build::Pluggable::CPANfile Module::Build::Pluggable::GithubMeta:: Module::Build::Pluggable::ReadmeMarkdownFromPod"
-    - "perl Build.PL"
+before_install: "cpanm --installdeps ."
 install:
-    - "./Build"
+    - "perl ./Build.PL"
+    - "Build"
 script:
     - "./Build test"
 notifications:
