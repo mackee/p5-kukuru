@@ -51,12 +51,12 @@ sub build_handler {
     my ($self, %vars) = @_;
     return $vars{handler} if $vars{handler};
 
-    my $handler = $vars{template} ? 'template' :
-                  $vars{exception}? 'exception':
-                  $vars{json}     ? 'json'     :
-                  $vars{text}     ? 'text'     :
-                  $vars{file}     ? 'file'     :
-                  $vars{data}     ? 'data'     : undef;
+    my $handler = defined $vars{template} ? 'template' :
+                  defined $vars{exception}? 'exception':
+                  defined $vars{json}     ? 'json'     :
+                  defined $vars{text}     ? 'text'     :
+                  defined $vars{file}     ? 'file'     :
+                  defined $vars{data}     ? 'data'     : undef;
 
     if (!$handler) {
         Carp::croak("No handler.");

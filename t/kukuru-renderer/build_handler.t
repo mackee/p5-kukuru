@@ -11,6 +11,14 @@ subtest 'build_handler' => sub {
     is $r->build_handler(data => 1), 'data';
 };
 
+subtest 'build_handler: defined' => sub {
+    my $r = Kukuru::Renderer->new;
+    is $r->build_handler(template => 0), 'template';
+    is $r->build_handler(json => 0), 'json';
+    is $r->build_handler(file => 0), 'file';
+    is $r->build_handler(data => 0), 'data';
+};
+
 subtest 'build_handler with handler' => sub {
     my $r = Kukuru::Renderer->new;
     my $handler = $r->build_handler(
