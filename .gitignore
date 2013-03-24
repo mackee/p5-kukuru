@@ -1,4 +1,6 @@
-^Kukuru-*
+Kukuru-*
+!t/kukuru*
+
 .*
 !.gitignore
 !.shipit
@@ -6,12 +8,17 @@
 *.obj
 *.bs
 *.def
+Build*
+!Build.PL
+_build/
 Makefile*
 !Makefile.PL
 *blib
 META.yml
+META.json
 MYMETA.yml
 MYMETA.json
+pm_to_blib
 inc/
 *.out
 *.bak
@@ -23,6 +30,8 @@ cover_db*
 *.gcno
 *.gcov
 *.stackdump
+.*.sw[pon]
+
 misc/*
 benchmark/result.txt
 sandbox/*
