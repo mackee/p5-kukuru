@@ -45,9 +45,8 @@ sub render {
         $code = $self->handlers->{$handler};
     }
     else {
-        my @vars_copy = @vars;
-
-        while(my ($key) = splice @vars_copy, 0, 2) {
+        for my $i (0..$#vars/2) {
+            my $key = $vars[$i * 2];
             if ($self->handlers->{$key}) {
                 $code = $self->handlers->{$key};
                 $vars{handler} = $key;
