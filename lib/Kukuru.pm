@@ -130,7 +130,7 @@ sub startup {}
 
 sub request_class    { 'Kukuru::Request'    }
 sub controller_class { 'Kukuru::Controller' }
-sub exception_class  { 'Kukuru::Exception' }
+sub exception_class  { 'Kukuru::Exception'  }
 
 sub app_controller_class { shift->meta->name."::Controller" }
 
