@@ -28,12 +28,12 @@ sub render {
         $template = shift;
     }
 
-    my %vars = @_;
-    if ($template) {
-        $vars{template} = $template;
-    }
-
-    $self->app->renderer->render($self->tx, $self, %vars);
+    $self->app->renderer->render(
+        $self->tx,
+        $self,
+        ($template ? (template => $template) : ()),
+        @_,
+    );
 }
 
 # TODO: send_*系

@@ -16,7 +16,8 @@ use Test::More;
         $self->renderer->add_handler(template => sub {
             my $tx = shift;
             my $c  = shift;
-            +{@_}
+
+            +{@_};
         });
     }
 }

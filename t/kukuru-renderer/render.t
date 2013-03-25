@@ -23,6 +23,29 @@ subtest 'render with template' => sub {
     is $count, 1;
 };
 
+
+subtest 'render with text' => sub {
+    my $renderer = Kukuru::Renderer->new;
+
+    my $count = 0;
+    $renderer->add_handler(template => sub {});
+    $renderer->add_handler(text => sub {
+        my ($tx, $c, %vars) = @_;
+
+        $count++;
+        is $vars{handler},  'text';
+        is $vars{text},     'hoge';
+        is $vars{template}, 'root/index';
+    });
+
+    my $tx = 'dummy';
+    my $c  = 'dummy';
+    is $count, 0;
+    $renderer->render($tx, $c, text => "hoge", template => 'root/index');
+    is $count, 1;
+};
+
+
 subtest 'render with hander' => sub {
     my $renderer = Kukuru::Renderer->new;
 
