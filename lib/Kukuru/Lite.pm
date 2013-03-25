@@ -1,7 +1,7 @@
 package Kukuru::Lite;
 use strict;
 use warnings;
-use Data::Util qw(install_subroutine);
+use Mouse::Util ();
 use Mouse ();
 
 sub import {
@@ -19,12 +19,12 @@ sub import {
         $methods{$name} = sub { $app->router->$name(@_) };
     }
 
-    install_subroutine($caller,
+    Mouse::Util::install_subroutines($caller,
         %methods,
         app    => sub { $app },
         plugin => sub { $app->load_plugin(@_) },
         hook   => sub { $app->add_hook(@_) },
     );
-} # use Mouse::Exporter ?
+}
 
 1;

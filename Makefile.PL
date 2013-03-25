@@ -6,7 +6,6 @@ WriteMakefile
   'NAME' => 'Kukuru',
   'VERSION_FROM' => 'lib/Kukuru.pm',
   'PREREQ_PM' => {
-                   'Data::Util' => '0.59',
                    'HTTP::Request::Common' => 6,
                    'JSON::XS' => '2.32',
                    'Module::Build::Pluggable::CPANfile' => '0.02',
