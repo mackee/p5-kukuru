@@ -36,7 +36,6 @@ t/kukuru-lite/plugin.t
 t/kukuru-lite/routes.t
 t/kukuru-renderer/add_handler.t
 t/kukuru-renderer/build.t
-t/kukuru-renderer/build_handler.t
 t/kukuru-renderer/handler/data/handler.t
 t/kukuru-renderer/handler/exception/handler.t
 t/kukuru-renderer/handler/json/handler.t
