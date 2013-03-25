@@ -3,7 +3,7 @@ use warnings;
 use Test::More;
 use Kukuru::Lite;
 
-for my $method (qw(any get options patch post put del)) {
+for my $method (qw(any get patch post put del)) {
     can_ok __PACKAGE__, $method;
 }
 
