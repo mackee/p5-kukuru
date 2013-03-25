@@ -19,22 +19,20 @@ subtest 'add_route' => sub {
     ok $route->{on_match};
 };
 
-subtest 'get, options, patch, post, put, del' => sub {
+subtest 'get, patch, post, put, del' => sub {
     my $router = Kukuru::Router->new;
     $router->get('/', 'Root#index');
-    $router->options('/', 'Root#index');
     $router->patch('/', 'Root#index');
     $router->post('/', 'Root#index');
     $router->put('/', 'Root#index');
     $router->del('/', 'Root#index');
 
-    is @{$router->routes}, 6;
+    is @{$router->routes}, 5;
     is_deeply $router->routes->[0]->{method}, [qw/GET HEAD/];
-    is_deeply $router->routes->[1]->{method}, [qw/OPTIONS/];
-    is_deeply $router->routes->[2]->{method}, [qw/PATCH/];
-    is_deeply $router->routes->[3]->{method}, [qw/POST/];
-    is_deeply $router->routes->[4]->{method}, [qw/PUT/];
-    is_deeply $router->routes->[5]->{method}, [qw/DELETE/];
+    is_deeply $router->routes->[1]->{method}, [qw/PATCH/];
+    is_deeply $router->routes->[2]->{method}, [qw/POST/];
+    is_deeply $router->routes->[3]->{method}, [qw/PUT/];
+    is_deeply $router->routes->[4]->{method}, [qw/DELETE/];
 };
 
 subtest 'error' => sub {

@@ -16,11 +16,6 @@ sub get {
     $self->add_route([qw(GET HEAD)], @_);
 }
 
-sub options {
-    my $self = shift;
-    $self->add_route([qw(OPTIONS)], @_);
-}
-
 sub patch {
     my $self = shift;
     $self->add_route([qw(PATCH)], @_);

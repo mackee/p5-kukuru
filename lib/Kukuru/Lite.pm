@@ -15,7 +15,7 @@ sub import {
     $meta->superclasses('Kukuru');
 
     my $app = $caller->new;
-    for my $name (qw(any get options patch post put del)) {
+    for my $name (qw(any get patch post put del)) {
         $methods{$name} = sub { $app->router->$name(@_) };
     }
 
