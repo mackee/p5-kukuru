@@ -24,6 +24,11 @@ use Encode;
             path => [File::Spec->catdir(dirname(__FILE__), 'views')],
         ));
 
+        $self->add_hook('html_filter' => sub {
+            my ($app, $tx, $output) = @_;
+            $$output = "html-filter" if $tx->req->path_info eq '/html-filter';
+        });
+
         $self->router->get('/byte-string' => sub {
             my ($self) = @_;
             $self->render(
@@ -63,6 +68,14 @@ use Encode;
                 format => "text",
             );
         });
+
+        $self->router->get('/html-filter' => sub {
+            my ($self) = @_;
+            $self->render('template.tx',
+                foo    => 'あいうえお',
+                format => "text",
+            );
+        });
     }
 }
 
@@ -93,6 +106,11 @@ test_psgi
             my $res = $cb->(GET '/override-status');
             is $res->code, 500;
             is $res->content, encode_utf8 "あいうえおあいうえお\n";
+        };
+
+        subtest 'fotmat is text' => sub {
+            my $res = $cb->(GET '/html-filter');
+            is $res->content, "html-filter";
         };
 
         subtest 'type is "text/plain; charset=UTF-8"' => sub {

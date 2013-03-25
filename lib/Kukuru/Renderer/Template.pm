@@ -18,6 +18,8 @@ sub handler {
         )
     }
 
+    $tx->app->emit_hook('html_filter', $tx, \$output);
+
     $output = $tx->req->encoding->encode($output);
     my $headers = [
         @{$tx->app->default_headers},
