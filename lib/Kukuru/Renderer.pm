@@ -36,33 +36,33 @@ sub add_handler {
 }
 
 sub render {
-    my ($self, $tx, $c, %vars) = @_;
+    my ($self, $tx, $c, @vars) = @_;
+    my %handlers = %{$self->handlers};
+    my %vars     = @vars;
 
-    $vars{handler} ||= $self->build_handler(%vars);
-    if (my $code = $self->handlers->{$vars{handler}}) {
+    my $code;
+    if (my $handler = $vars{handler}) {
+        $code = $self->handlers->{$handler};
+    }
+    else {
+        my @vars_copy = @vars;
+
+        while(my ($key) = splice @vars_copy, 0, 2) {
+            if ($self->handlers->{$key}) {
+                $code = $self->handlers->{$key};
+                $vars{handler} = $key;
+                last;
+            }
+        }
+    }
+
+    if (ref $code eq 'CODE') {
         $code->($tx, $c, %vars);
     }
     else {
-        Carp::croak(qq!No handler for "$vars{handler}" available.!);
+        # TODO: level
+        Carp::croak(qq!No handler for "$vars{handler}" available!);
     }
-}
-
-sub build_handler {
-    my ($self, %vars) = @_;
-    return $vars{handler} if $vars{handler};
-
-    my $handler = defined $vars{template} ? 'template' :
-                  defined $vars{exception}? 'exception':
-                  defined $vars{json}     ? 'json'     :
-                  defined $vars{text}     ? 'text'     :
-                  defined $vars{file}     ? 'file'     :
-                  defined $vars{data}     ? 'data'     : undef;
-
-    if (!$handler) {
-        Carp::croak("No handler.");
-    }
-
-    return $handler;
 }
 
 __PACKAGE__->meta->make_immutable;
